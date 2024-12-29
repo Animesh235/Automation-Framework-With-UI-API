@@ -1,0 +1,66 @@
+pipeline {
+    agent any
+
+    environment {
+        MAVEN_HOME = tool name: 'Maven' // Replace with your Maven tool name in Jenkins
+        JAVA_HOME = tool name: 'JDK 11' // Replace with your JDK version in Jenkins
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                echo 'Cloning repository...'
+                git branch: 'main', url: 'https://github.com/your-repository-url.git' // Replace with your Git repo URL
+            }
+        }
+
+        stage('Setup Environment') {
+            steps {
+                echo 'Setting up Maven and Java...'
+                script {
+                    env.PATH = "${MAVEN_HOME}/bin:${JAVA_HOME}/bin:${env.PATH}"
+                }
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                echo 'Running tests...'
+                sh 'mvn clean test'
+            }
+        }
+
+        stage('Generate Reports') {
+            steps {
+                echo 'Generating reports...'
+                sh 'mvn surefire-report:report' // Optional if you are using Surefire plugin
+            }
+        }
+
+        stage('Archive Reports') {
+            steps {
+                echo 'Archiving reports...'
+                archiveArtifacts artifacts: 'reports/**/*.html', fingerprint: true
+            }
+        }
+
+        stage('Publish Test Results') {
+            steps {
+                echo 'Publishing test results...'
+                junit 'target/surefire-reports/*.xml' // Path to TestNG/Surefire XML reports
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline completed.'
+        }
+        success {
+            echo 'Build succeeded.'
+        }
+        failure {
+            echo 'Build failed.'
+        }
+    }
+}
