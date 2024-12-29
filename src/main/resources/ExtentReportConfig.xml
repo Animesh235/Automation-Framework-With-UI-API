@@ -1,0 +1,21 @@
+<configuration>
+    <report>
+        <theme>STANDARD</theme>
+        <encoding>UTF-8</encoding>
+        <protocol>HTTPS</protocol>
+        <documentTitle>Automation Test Report</documentTitle>
+        <reportName>Test Execution Results</reportName>
+    </report>
+
+    <spark-config>
+        <theme>dark</theme>
+        <timelineEnabled>true</timelineEnabled>
+        <offlineMode>true</offlineMode>
+        <encoding>UTF-8</encoding>
+    </spark-config>
+
+    <log>
+        <enabled>true</enabled>
+        <level>info</level>
+    </log>
+</configuration>
